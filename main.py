@@ -96,13 +96,16 @@ async def timer(message: types.Message):
     elif i == 3:
         time_to_call += timedelta(hours=3)
         i = 0
+
     await bot.send_message(admin_id, f"{i} -- {time_to_call}")
     all_users_id = insert_select_delete_db(user_id=None, user_name=None, key='select')
     for users in await all_users_id:
         await sender(await parser_xml(URLBANK), 'Банк:', int(users[0]))
         await sender(await parser_xml(URLCARD), 'Картка:', int(users[0]))
     await asyncio.sleep(time_to_call.total_seconds())
-    await send_message(message)
+    if i == 0:
+        time_to_call = 0
+    await timer(message)
 
 
 @dp.message_handler(content_types=['text'])
